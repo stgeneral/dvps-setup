@@ -1,0 +1,24 @@
+<VirtualHost *:80>
+	ServerName username.dev
+	ServerAdmin username@corp.web4pro.com.ua
+	DocumentRoot /media/sf_webserver/public_html
+	<Directory /media/sf_webserver/public_html/>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	ErrorLog /media/sf_webserver/logs/apache-error.log
+	CustomLog /media/sf_webserver/logs/apache-access.log combined
+
+	php_value display_errors	On
+	php_value display_startup_errors	On
+	php_value log_errors On
+	php_value error_log /media/sf_webserver/logs/php-error.log
+	php_value html_errors	On
+	php_value default_charset UTF-8
+	php_value post_max_size 32M
+	php_value upload_max_filesize 32M
+
+</VirtualHost>
