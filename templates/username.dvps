@@ -1,5 +1,5 @@
 <VirtualHost *:80>
-	ServerName username.dev
+	ServerName username.dvps
 	ServerAdmin username@corp.web4pro.com.ua
 	DocumentRoot /media/sf_webserver/public_html
 	<Directory /media/sf_webserver/public_html/>
