@@ -3,20 +3,19 @@
 if [[ "`groups`" == *"vboxsf"* ]]; then
   echo "VirtualBox guest utils are installed already"
 else
-  sudo -i
   echo "Upgrading the system"
-  aptitude update
-  aptitude upgrade -y
+  sudo aptitude update
+  sudo aptitude upgrade -y
 
   echo "Installing VirtualBox guest utils"
-  aptitude install -y virtualbox-ose-guest-utils
+  sudo aptitude install -y virtualbox-ose-guest-utils
 
   echo "Adding '$USER' and 'www-data' users to 'vboxsf' group"
-  usermod -aG vboxsf www-data
-  usermod -aG vboxsf $USER
+  sudo usermod -aG vboxsf www-data
+  sudo usermod -aG vboxsf $USER
 
   echo "You should restart the system and run this script again to complete setup"
-  exit
+  exit 0
 fi
 
 echo "Creating webserver directory structure"
@@ -28,19 +27,19 @@ ln -s /media/sf_webserver/logs
 ln -s /media/sf_webserver/sites
 
 echo "Configuring Apache"
-sudo -i
-cp -f ~/dvps-setup/templates/httpd.conf /etc/apache2/
-cp -f ~/dvps-setup/templates/username.dvps /etc/apache2/sites-available/$USER.dvps
-sed -i "s/username/$USER/g" /etc/apache2/sites-available/$USER.dvps
-a2ensite $USER.dvps
+
+sudo cp -f ~/dvps-setup/templates/httpd.conf /etc/apache2/
+sudo cp -f ~/dvps-setup/templates/username.dvps /etc/apache2/sites-available/$USER.dvps
+sudo sed -i "s/username/$USER/g" /etc/apache2/sites-available/$USER.dvps
+sudo a2ensite $USER.dvps
 echo "Do not forget to virtual domain to your hosts file:"
 echo "127.0.0.1 $USER.dvps"
-a2enmod rewrite
-service apache2 restart
+sudo a2enmod rewrite
+sudo service apache2 restart
 
 echo "Installing development software"
 # sudo aptitude install -y php-codesniffer php5-sqlite php5-xdebug git-core
-aptitude install -y phpmyadmin php5-curl php5-gd php5-mcrypt php-apc mc subversion git-core
+sudo aptitude install -y phpmyadmin php5-curl php5-gd php5-mcrypt php-apc mc subversion git-core
 
 #
 # mysql create user
