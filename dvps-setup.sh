@@ -34,7 +34,7 @@ cp -n ~/dvps-setup/templates/public_html/* /media/sf_webserver/public_html
 
 echo "Installing LAMP stack and other development software"
 # sudo aptitude install -y php-codesniffer php5-sqlite php5-xdebug php-apc git-core 
-sudo aptitude install -y apache2 php5 php5-cli mysql-server mysql-client phpmyadmin php5-curl php5-gd php5-mcrypt mc subversion git-core
+sudo aptitude install -y apache2 php5 php5-cli mysql-server mysql-client phpmyadmin php5-curl php5-gd php5-mcrypt mc subversion git-core makepasswd
 
 echo "Configuring Apache"
 sudo cp -f ~/dvps-setup/templates/httpd.conf /etc/apache2/
@@ -44,14 +44,17 @@ sudo a2ensite $USER.dvps
 sudo a2enmod rewrite
 sudo service apache2 restart
 
-sudo aptitude install -y makepasswd
-
-echo "Going to create mysql user '$USER'. Please, provide MySQL root password."
-USERPASSWORD=`makepasswd`
-cat ~/dvps-setup/scripts/mysql-create-user.sql |
-  sed "s/{username}/$USER/g" |
-  sed "s/{userpassword}/$USERPASSWORD/g" |
-  mysql -u root -p
+read -p "Would you like to create MySQL user '$USER'? [Y/n]?:" CREATE_MYSQL_USER
+if [[ $CREATE_MYSQL_USER != 'n' ]] then
+  echo "Going to create mysql user '$USER'. Please, provide MySQL root password."
+  USERPASSWORD=`makepasswd`
+  cat ~/dvps-setup/scripts/mysql-create-user.sql |
+    sed "s/{username}/$USER/g" |
+    sed "s/{userpassword}/$USERPASSWORD/g" |
+    mysql -u root -p
+else
+  USERPASSWORD='***'
+fi
 
 echo # echo empty line to make a space before instructions output
 cat ~/dvps-setup/templates/instructions.txt |
