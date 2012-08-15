@@ -29,6 +29,7 @@ ln -s /media/sf_webserver/backups
 ln -s /media/sf_webserver/public_html
 ln -s /media/sf_webserver/logs
 ln -s /media/sf_webserver/sites
+cp ~/dvps-setup/templates/* /media/sf_webserver/public_html
 
 echo "Installing LAMP stack and other development software"
 # sudo aptitude install -y php-codesniffer php5-sqlite php5-xdebug php-apc git-core 
