@@ -45,7 +45,7 @@ sudo a2enmod rewrite
 sudo service apache2 restart
 
 read -p "Would you like to create MySQL user '$USER'? [Y/n]?:" CREATE_MYSQL_USER
-if [[ $CREATE_MYSQL_USER != 'n' ]] then
+if [[ $CREATE_MYSQL_USER != 'n' ]]; then
   echo "Going to create mysql user '$USER'. Please, provide MySQL root password."
   USERPASSWORD=`makepasswd`
   cat ~/dvps-setup/scripts/mysql-create-user.sql |
