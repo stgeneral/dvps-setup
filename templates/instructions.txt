@@ -1,0 +1,10 @@
+=======================================================
+==================== Instructions =====================
+=======================================================
+Do not forget to virtual domain to your hosts file:
+127.0.0.1 {username}.dvps
+
+MySQL credentials:
+username: {username}
+password: {userpassword}
+=======================================================

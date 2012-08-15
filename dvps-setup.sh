@@ -30,26 +30,28 @@ ln -s /media/sf_webserver/public_html
 ln -s /media/sf_webserver/logs
 ln -s /media/sf_webserver/sites
 
-echo "Configuring Apache"
+echo "Installing LAMP stack and other development software"
+# sudo aptitude install -y php-codesniffer php5-sqlite php5-xdebug php-apc git-core 
+sudo aptitude install -y apache2 php5 php5-cli mysql-server mysql-client phpmyadmin php5-curl php5-gd php5-mcrypt mc subversion git-core
 
+echo "Configuring Apache"
 sudo cp -f ~/dvps-setup/templates/httpd.conf /etc/apache2/
 sudo cp -f ~/dvps-setup/templates/username.dvps /etc/apache2/sites-available/$USER.dvps
 sudo sed -i "s/username/$USER/g" /etc/apache2/sites-available/$USER.dvps
 sudo a2ensite $USER.dvps
-echo "Do not forget to virtual domain to your hosts file:"
-echo "127.0.0.1 $USER.dvps"
 sudo a2enmod rewrite
 sudo service apache2 restart
 
-echo "Installing development software"
-# sudo aptitude install -y php-codesniffer php5-sqlite php5-xdebug php-apc git-core 
-sudo aptitude install -y phpmyadmin php5-curl php5-gd php5-mcrypt mc subversion git-core
-
 sudo aptitude install -y makepasswd
 
-echo "Going to create mysql user '$USER'. Please, provide mysql root password."
+echo "Going to create mysql user '$USER'. Please, provide MySQL root password."
 USERPASSWORD=`makepasswd`
 cat ~/dvps-setup/scripts/mysql-create-user.sql | 
-  sed "s/username/dbabenko/g" | 
+  sed "s/username/$USER/g" | 
   sed "s/userpassword/$USERPASSWORD/g" | 
   mysql -u root -p
+
+echo # echo empty line to make a space before instructions output
+cat ~/dvps-setup/templates/instructions.txt | 
+  sed "s/{username}/$USER/g" | 
+  sed "s/{userpassword}/$USERPASSWORD/g"
