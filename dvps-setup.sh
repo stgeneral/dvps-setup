@@ -29,6 +29,7 @@ ln -s /media/sf_webserver/backups
 ln -s /media/sf_webserver/public_html
 ln -s /media/sf_webserver/logs
 ln -s /media/sf_webserver/sites
+cp ~/dvps-setup/templates/public_html/index.html /media/sf_webserver/public_html && sed -i "s/{username}/$USER/g" /media/sf_webserver/public_html/index.html
 cp ~/dvps-setup/templates/public_html/* /media/sf_webserver/public_html
 
 echo "Installing LAMP stack and other development software"
@@ -38,7 +39,7 @@ sudo aptitude install -y apache2 php5 php5-cli mysql-server mysql-client phpmyad
 echo "Configuring Apache"
 sudo cp -f ~/dvps-setup/templates/httpd.conf /etc/apache2/
 sudo cp -f ~/dvps-setup/templates/username.dvps /etc/apache2/sites-available/$USER.dvps
-sudo sed -i "s/username/$USER/g" /etc/apache2/sites-available/$USER.dvps
+sudo sed -i "s/{username}/$USER/g" /etc/apache2/sites-available/$USER.dvps
 sudo a2ensite $USER.dvps
 sudo a2enmod rewrite
 sudo service apache2 restart
@@ -47,12 +48,12 @@ sudo aptitude install -y makepasswd
 
 echo "Going to create mysql user '$USER'. Please, provide MySQL root password."
 USERPASSWORD=`makepasswd`
-cat ~/dvps-setup/scripts/mysql-create-user.sql | 
-  sed "s/username/$USER/g" | 
-  sed "s/userpassword/$USERPASSWORD/g" | 
+cat ~/dvps-setup/scripts/mysql-create-user.sql |
+  sed "s/{username}/$USER/g" |
+  sed "s/{userpassword}/$USERPASSWORD/g" |
   mysql -u root -p
 
 echo # echo empty line to make a space before instructions output
-cat ~/dvps-setup/templates/instructions.txt | 
-  sed "s/{username}/$USER/g" | 
+cat ~/dvps-setup/templates/instructions.txt |
+  sed "s/{username}/$USER/g" |
   sed "s/{userpassword}/$USERPASSWORD/g"

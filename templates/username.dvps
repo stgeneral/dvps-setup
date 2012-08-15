@@ -1,6 +1,6 @@
 <VirtualHost *:80>
-	ServerName username.dvps
-	ServerAdmin username@corp.web4pro.com.ua
+	ServerName {username}.dvps
+	ServerAdmin {username}@corp.web4pro.com.ua
 	DocumentRoot /media/sf_webserver/public_html
 	<Directory /media/sf_webserver/public_html/>
 		Options Indexes FollowSymLinks MultiViews
@@ -20,5 +20,4 @@
 	php_value default_charset UTF-8
 	php_value post_max_size 32M
 	php_value upload_max_filesize 32M
-
 </VirtualHost>
