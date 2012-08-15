@@ -3,6 +3,10 @@
 if [[ "`groups`" == *"vboxsf"* ]]; then
   echo "VirtualBox guest utils are installed already"
 else
+  echo "Adding virtualbox repository"
+  wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+  sudo cp ~/dvps-setup/templates/virtualbox.list /etc/apt/sources.list.d/
+
   echo "Upgrading the system"
   sudo aptitude update
   sudo aptitude upgrade -y
@@ -38,12 +42,14 @@ sudo a2enmod rewrite
 sudo service apache2 restart
 
 echo "Installing development software"
-# sudo aptitude install -y php-codesniffer php5-sqlite php5-xdebug git-core
-sudo aptitude install -y phpmyadmin php5-curl php5-gd php5-mcrypt php-apc mc subversion git-core
+# sudo aptitude install -y php-codesniffer php5-sqlite php5-xdebug php-apc git-core 
+sudo aptitude install -y phpmyadmin php5-curl php5-gd php5-mcrypt mc subversion git-core
 
-#
-# mysql create user
-#
-# CREATE USER 'dev'@'%' IDENTIFIED BY '***';
-# GRANT USAGE ON * . * TO 'dev'@'%' IDENTIFIED BY '***' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
-# GRANT ALL PRIVILEGES ON `dev\_%` . * TO 'dev'@'%';
+sudo aptitude install -y makepasswd
+
+echo "Going to create mysql user '$USER'. Please, provide mysql root password."
+USERPASSWORD=`makepasswd`
+cat ~/dvps-setup/scripts/mysql-create-user.sql | 
+  sed "s/username/dbabenko/g" | 
+  sed "s/userpassword/$USERPASSWORD/g" | 
+  mysql -u root -p
