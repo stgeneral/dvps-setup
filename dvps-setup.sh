@@ -34,7 +34,10 @@ cp -n ~/dvps-setup/templates/public_html/* /media/sf_webserver/public_html
 
 echo "Installing LAMP stack and other development software"
 # sudo aptitude install -y php-codesniffer php5-sqlite php5-xdebug php-apc git-core 
-sudo aptitude install -y apache2 php5 php5-cli mysql-server mysql-client phpmyadmin php5-curl php5-gd php5-mcrypt mc subversion git-core makepasswd
+sudo aptitude install -y apache2 apache2-mpm-prefork php5 php5-cli mysql-server mysql-client phpmyadmin php5-curl php5-gd php5-mcrypt mc subversion git-core makepasswd
+
+# echo "Installing OpenSSH"
+# sudo aptitude install openssh-server openssh-blacklist openssh-blacklist-extra
 
 echo "Configuring Apache"
 sudo cp -f ~/dvps-setup/templates/httpd.conf /etc/apache2/
